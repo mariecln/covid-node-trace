@@ -36,6 +36,7 @@ class SettingsFragment: Fragment() {
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         val communicationTypeFromStorage : Int = sharedPref.getInt(getString(R.string.communication_type_state), 0)
 
+
         advertiseOrScanSwitch = view.findViewById(R.id.type_switch)
 
         if (communicationTypeFromStorage == 1) {
