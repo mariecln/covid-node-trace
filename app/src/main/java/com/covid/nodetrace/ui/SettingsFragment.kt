@@ -36,7 +36,15 @@ class SettingsFragment: Fragment() {
 
 
         advertiseOrScanSwitch = view.findViewById(R.id.type_switch)
-        val button_mode_broadcast = view.findViewById<Button>(R.id.data_collection)
+        val buttonModeBroadcast = view.findViewById<Button>(R.id.data_collection)
+        val appMode = view.findViewById<Button>(R.id.app_mode)
+        val switch = view.findViewById<LinearLayout>(R.id.layout_switch)
+
+        switch.visibility = View.INVISIBLE
+
+        appMode.setOnClickListener {
+            switch.visibility = View.VISIBLE
+        }
 
 
         if (communicationTypeFromStorage == 1) {
@@ -70,8 +78,8 @@ class SettingsFragment: Fragment() {
         //adding broadcasting part
        var communicationTypeState = 0
 
-        button_mode_broadcast.setOnClickListener {
-            //The app only sent all of the phone data
+        buttonModeBroadcast.setOnClickListener {
+                switch.visibility = View.INVISIBLE
                 model.communicationType.value = ContactService.CommunicationType.SCAN_AND_ADVERTISE
                 communicationTypeState = ContactService.CommunicationType.SCAN_AND_ADVERTISE.ordinal
 

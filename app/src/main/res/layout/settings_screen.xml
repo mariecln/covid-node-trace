@@ -74,6 +74,7 @@
                     android:text="@string/type_explanation"
                     android:textAlignment="center"
                     android:textSize="14sp"/>
+
             </LinearLayout>
 
             <LinearLayout
@@ -85,8 +86,44 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/choices_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+            <Button
+                android:id="@+id/app_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="20dp"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:textSize="24sp"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:text="App mode"
+                />
+
+            <Button
+                android:id="@+id/data_collection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="20dp"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:textSize="24sp"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:text="Broadcasting"
+                />
+
+        </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layout_switch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -118,18 +155,6 @@
                     android:textAlignment="center"
                     android:textSize="14sp" />
             </LinearLayout>
-            <Button
-                android:id="@+id/data_collection"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="20dp"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp"
-                android:textSize="24sp"
-                android:background="@color/colorPrimary"
-                android:textColor="@color/white"
-                android:text="Broadcasting"/>
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
