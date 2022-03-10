@@ -5,12 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.Switch
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.covid.nodetrace.ContactService
 import com.covid.nodetrace.R
 
@@ -38,6 +36,8 @@ class SettingsFragment: Fragment() {
 
 
         advertiseOrScanSwitch = view.findViewById(R.id.type_switch)
+        val button_mode_broadcast = view.findViewById<Button>(R.id.data_collection)
+
 
         if (communicationTypeFromStorage == 1) {
             advertiseOrScanSwitch.setChecked(false)
@@ -66,6 +66,22 @@ class SettingsFragment: Fragment() {
                 apply()
             }
         }
+
+        //adding broadcasting part
+       var communicationTypeState = 0
+
+        button_mode_broadcast.setOnClickListener {
+            //The app only sent all of the phone data
+                model.communicationType.value = ContactService.CommunicationType.SCAN_AND_ADVERTISE
+                communicationTypeState = ContactService.CommunicationType.SCAN_AND_ADVERTISE.ordinal
+
+        }
+
+        with (requireActivity().getPreferences(Context.MODE_PRIVATE).edit()) {
+            putInt(resources.getString(R.string.communication_type_state), communicationTypeState)
+            apply()
+        }
+
 
         val devMode : Boolean = sharedPref.getBoolean(getString(R.string.dev_mode), false)
 

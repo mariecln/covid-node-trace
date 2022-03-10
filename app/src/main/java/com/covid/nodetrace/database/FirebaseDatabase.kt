@@ -15,9 +15,11 @@ class FirebaseDatabase () : FirebaseDao {
 
     val db = FirebaseFirestore.getInstance()
     private val contactsCollection: CollectionReference
+    private val broadcastCollection: CollectionReference
 
     init {
         contactsCollection = db.collection("contacts");
+        broadcastCollection = db.collection("broadcast");
     }
 
     override suspend fun create(context: Context, contactID: String) : Boolean = suspendCancellableCoroutine { continuation ->
@@ -84,5 +86,23 @@ class FirebaseDatabase () : FirebaseDao {
 
     override suspend fun delete(context: Context, contactID: String) : Boolean {
         TODO("Not yet implemented")
+    }
+
+    fun addBroadcast(Contact : String, Date : String, Latitude : String, Longitude : String,  Duration : String, Rssi : String, HealthStatus : String)
+    {
+        val info = hashMapOf(
+            "contact" to Contact,
+            "date" to Date,
+            "latitude" to Latitude,
+            "longitude" to Longitude,
+            "duration" to Duration,
+            "rssi" to Rssi,
+            "health_status" to HealthStatus
+        )
+
+        broadcastCollection.document("broadcasting")
+            .set(info)
+            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
+            .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
     }
 }

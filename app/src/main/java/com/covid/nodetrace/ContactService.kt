@@ -147,6 +147,7 @@ public class ContactService() : Service(), CoroutineScope {
                     .setContentIntent(pendingIntent)
                     .build()
             }
+
         }
         if (notification == null) {
             Log.e(TAG, "Communication type not set")

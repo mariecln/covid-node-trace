@@ -82,38 +82,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 >
-                <ImageButton
-                    android:id="@+id/user_mode"
-                    android:layout_width="30dp"
-                    android:layout_height="100dp"
-                    android:layout_weight="1"
-                    android:layout_margin="20dp"
-                    android:layout_gravity="left"
-                    android:contentDescription="Data_Collection"
-                    android:src="@drawable/user"
-                    />
-
-                <ImageButton
-                    android:id="@+id/node_mode"
-                    android:layout_width="30dp"
-                    android:layout_height="100dp"
-                    android:layout_weight="1"
-                    android:layout_margin="20dp"
-                    android:layout_gravity="left"
-                    android:contentDescription="Data_Collection"
-                    android:src="@drawable/node"
-                    />
-
-                <ImageButton
-                    android:id="@+id/collection_mode"
-                    android:layout_width="30dp"
-                    android:layout_height="100dp"
-                    android:layout_weight="1"
-                    android:layout_margin="20dp"
-                    android:layout_gravity="left"
-                    android:contentDescription="Data_Collection"
-                    android:src="@drawable/data_collection"
-                    />
 
             </LinearLayout>
 
@@ -150,6 +118,18 @@
                     android:textAlignment="center"
                     android:textSize="14sp" />
             </LinearLayout>
+            <Button
+                android:id="@+id/data_collection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="20dp"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:textSize="24sp"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:text="Broadcasting"/>
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
