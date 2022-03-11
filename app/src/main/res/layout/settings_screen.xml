@@ -90,35 +90,34 @@
                 android:id="@+id/choices_section"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:gravity="center">
-            <Button
-                android:id="@+id/app_mode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="20dp"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp"
-                android:textSize="24sp"
-                android:background="@color/colorPrimary"
-                android:textColor="@color/white"
-                android:text="App mode"
-                />
 
-            <Button
-                android:id="@+id/data_collection"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="20dp"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp"
-                android:textSize="24sp"
-                android:background="@color/colorPrimary"
-                android:textColor="@color/white"
-                android:text="Broadcasting"
-                />
+                <TextView
+                    android:id="@+id/app_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="App mode"
+                    android:textAlignment="center"
+                    android:textSize="14sp" />
+
+                <Switch
+                    android:id="@+id/type_switch1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="20dp"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/broadcast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Broadcast mode"
+                    android:textAlignment="center"
+                    android:textSize="14sp" />
 
         </LinearLayout>
 
@@ -152,6 +151,31 @@
                     android:layout_height="wrap_content"
                     android:padding="10dp"
                     android:text="@string/user_title"
+                    android:textAlignment="center"
+                    android:textSize="14sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layout_advert"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/advertise"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="ID advertise : "
+                    android:textAlignment="center"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/ID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="none "
                     android:textAlignment="center"
                     android:textSize="14sp" />
             </LinearLayout>

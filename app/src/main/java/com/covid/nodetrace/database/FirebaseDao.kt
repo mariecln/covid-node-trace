@@ -11,6 +11,12 @@ interface FirebaseDao {
     suspend fun create(context: Context, contactID : String) : Boolean
 
     /**
+     * POSTs a contact ID to the database
+     * @return if the POST request was successfull or not
+     */
+    suspend fun addBroadcast(Contact : String, Date : String, Location : String, Duration : String, Rssi : String) : Boolean
+
+    /**
      * GETs a list of contact IDs from the database
      * @return if the GET request was successfull or not
      */

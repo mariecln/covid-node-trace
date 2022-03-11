@@ -1,6 +1,7 @@
 package com.covid.nodetrace.database
 
 import android.content.Context
+import android.location.Location
 import android.util.Log
 import com.covid.nodetrace.util.NetworkHelper
 import com.google.firebase.firestore.CollectionReference
@@ -88,21 +89,20 @@ class FirebaseDatabase () : FirebaseDao {
         TODO("Not yet implemented")
     }
 
-    fun addBroadcast(Contact : String, Date : String, Latitude : String, Longitude : String,  Duration : String, Rssi : String, HealthStatus : String)
-    {
+    override suspend fun addBroadcast(Contact : String, Date : String, Location : String, Duration : String, Rssi : String) : Boolean {
         val info = hashMapOf(
             "contact" to Contact,
             "date" to Date,
-            "latitude" to Latitude,
-            "longitude" to Longitude,
+            "location" to Location,
             "duration" to Duration,
-            "rssi" to Rssi,
-            "health_status" to HealthStatus
+            "rssi" to Rssi
         )
 
         broadcastCollection.document("broadcasting")
             .set(info)
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+        return true
+
     }
 }

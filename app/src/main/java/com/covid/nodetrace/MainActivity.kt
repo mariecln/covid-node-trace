@@ -15,15 +15,24 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
+import com.covid.nodetrace.database.AppDatabase
 import com.covid.nodetrace.permissions.PermissionHelper
 import com.covid.nodetrace.permissions.PermissionRationale
-import com.covid.nodetrace.util.NetworkHelper
 import com.covid.nodetrace.permissions.Permissions
 import com.covid.nodetrace.permissions.Permissions.requiredPermissions
 import com.covid.nodetrace.ui.AppViewModel
+import com.covid.nodetrace.util.DataFormatter
+import com.covid.nodetrace.util.NetworkHelper
+import com.covid.nodetrace.workmanager.RefreshDataWorker
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.*
+import java.util.concurrent.TimeUnit
 import kotlin.coroutines.CoroutineContext
+
 
 /**
  * The app's main activity is the entry point of the app and
@@ -40,6 +49,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     private val model: AppViewModel by viewModels()
     override val coroutineContext: CoroutineContext = Dispatchers.Main + SupervisorJob()
     private lateinit var auth: FirebaseAuth
+    private lateinit var appDatabase : AppDatabase
 
     private lateinit var contactManager : ContactManager
     private var contactService : ContactService? = null
@@ -53,6 +63,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         CONTACT,
         SETTINGS
     }
+
 
     //================================================================================
     // Service logic
@@ -126,12 +137,30 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             permissionRationale.showRationale(this, PermissionHelper.Companion.PERMISSION_REQUEST_CODE)
         }
 
+
         //Load screen that was open the previous time the app was closed
         val sharedPref = getPreferences(Context.MODE_PRIVATE)
         val storedScreenState : Int = sharedPref.getInt(getString(R.string.screen_state), 0)
         showScreen(Screens.values()[storedScreenState])
 
         contactManager.checkForRiskContacts()
+        setPeriodicWorkRequest()
+
+    }
+
+    private fun setPeriodicWorkRequest() {
+
+        val constraints= androidx.work.Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+
+        var periodicWorkRequest =
+            PeriodicWorkRequest.Builder(RefreshDataWorker::class.java, 1, TimeUnit.DAYS)
+                .setConstraints(constraints)
+                .build()
+
+        WorkManager.getInstance(applicationContext).enqueue(periodicWorkRequest)
     }
 
     /**

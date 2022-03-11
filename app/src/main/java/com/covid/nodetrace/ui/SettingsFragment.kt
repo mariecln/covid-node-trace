@@ -20,6 +20,7 @@ class SettingsFragment: Fragment() {
     private val model: AppViewModel by activityViewModels()
 
     private lateinit var advertiseOrScanSwitch : Switch
+    private lateinit var appModeOrBroadcast : Switch
     private var devModeClicks : Int = 0
     private final val DEV_CLICKS_NEEDED = 6
 
@@ -32,63 +33,90 @@ class SettingsFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
-        val communicationTypeFromStorage : Int = sharedPref.getInt(getString(R.string.communication_type_state), 0)
-
+        val communicationTypeFromStorage: Int =
+            sharedPref.getInt(getString(R.string.communication_type_state), 0)
 
         advertiseOrScanSwitch = view.findViewById(R.id.type_switch)
-        val buttonModeBroadcast = view.findViewById<Button>(R.id.data_collection)
-        val appMode = view.findViewById<Button>(R.id.app_mode)
-        val switch = view.findViewById<LinearLayout>(R.id.layout_switch)
-
-        switch.visibility = View.INVISIBLE
-
-        appMode.setOnClickListener {
-            switch.visibility = View.VISIBLE
-        }
-
 
         if (communicationTypeFromStorage == 1) {
             advertiseOrScanSwitch.setChecked(false)
-        }
-        else {
+        } else {
             advertiseOrScanSwitch.setChecked(true)
         }
 
-        advertiseOrScanSwitch.setOnCheckedChangeListener{switchView, isChecked ->
+        advertiseOrScanSwitch.setOnCheckedChangeListener { switchView, isChecked ->
 
             var communicationTypeState = 0
 
-            if(isChecked) {
+            if (isChecked) {
                 //The app only scans for devices if it's set to 'USER'
                 model.communicationType.value = ContactService.CommunicationType.SCAN
                 communicationTypeState = ContactService.CommunicationType.SCAN.ordinal
-            }
-            else {
+            } else {
                 //The app only advertises if it's set to 'NODE'
                 model.communicationType.value = ContactService.CommunicationType.ADVERTISE
                 communicationTypeState = ContactService.CommunicationType.ADVERTISE.ordinal
             }
 
-            with (requireActivity().getPreferences(Context.MODE_PRIVATE).edit()) {
-                putInt(resources.getString(R.string.communication_type_state), communicationTypeState)
+            with(requireActivity().getPreferences(Context.MODE_PRIVATE).edit()) {
+                putInt(
+                    resources.getString(R.string.communication_type_state),
+                    communicationTypeState
+                )
                 apply()
             }
         }
 
-        //adding broadcasting part
-       var communicationTypeState = 0
 
-        buttonModeBroadcast.setOnClickListener {
-                switch.visibility = View.INVISIBLE
+        /*advertiseOrScanSwitch = view.findViewById(R.id.type_switch)
+        appModeOrBroadcast = view.findViewById(R.id.type_switch1)
+        val switch = view.findViewById<LinearLayout>(R.id.layout_switch)
+        switch.visibility = View.INVISIBLE
+
+
+        appModeOrBroadcast.setOnCheckedChangeListener{switchView, isChecked ->
+
+            var communicationTypeState = 0
+
+            if(isChecked) {
                 model.communicationType.value = ContactService.CommunicationType.SCAN_AND_ADVERTISE
                 communicationTypeState = ContactService.CommunicationType.SCAN_AND_ADVERTISE.ordinal
+            }
+            else {
+                switch.visibility = View.VISIBLE
+                if (communicationTypeFromStorage == 1) {
+                    advertiseOrScanSwitch.setChecked(false)
+                }
+                else {
+                    advertiseOrScanSwitch.setChecked(true)
+                }
+            }
+            advertiseOrScanSwitch.setOnCheckedChangeListener{switchView, isChecked ->
 
-        }
+                var communicationTypeState = 0
 
-        with (requireActivity().getPreferences(Context.MODE_PRIVATE).edit()) {
-            putInt(resources.getString(R.string.communication_type_state), communicationTypeState)
-            apply()
-        }
+                if(isChecked) {
+                    //The app only scans for devices if it's set to 'USER'
+                    model.communicationType.value = ContactService.CommunicationType.SCAN
+                    communicationTypeState = ContactService.CommunicationType.SCAN.ordinal
+                }
+                else {
+                    //The app only advertises if it's set to 'NODE'
+                    model.communicationType.value = ContactService.CommunicationType.ADVERTISE
+                    communicationTypeState = ContactService.CommunicationType.ADVERTISE.ordinal
+                }
+
+                with (requireActivity().getPreferences(Context.MODE_PRIVATE).edit()) {
+                    putInt(resources.getString(R.string.communication_type_state), communicationTypeState)
+                    apply()
+                }
+            }
+
+            with (requireActivity().getPreferences(Context.MODE_PRIVATE).edit()) {
+                putInt(resources.getString(R.string.communication_type_state), communicationTypeState)
+                apply()
+            }*/
+
 
 
         val devMode : Boolean = sharedPref.getBoolean(getString(R.string.dev_mode), false)
