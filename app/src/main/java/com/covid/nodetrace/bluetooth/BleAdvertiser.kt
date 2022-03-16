@@ -27,14 +27,14 @@ class BleAdvertiser @TargetApi(Build.VERSION_CODES.M) constructor() {
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    fun advertiseData(data: AdvertiseData?, settings : AdvertiseSettings) {
+    fun advertiseData(data: AdvertiseData?, advScanResponse: AdvertiseData?, settings : AdvertiseSettings) {
 
         if (advertiser == null) {
             Log.w(TAG, "Device cannot advertise data");
             return;
         }
 
-        advertiser.startAdvertising(settings, data, advertiseCallback)
+        advertiser.startAdvertising(settings, advScanResponse, data, advertiseCallback)
     }
 
     fun stopAdvertising () {

@@ -98,11 +98,12 @@ class FirebaseDatabase () : FirebaseDao {
             "rssi" to Rssi
         )
 
-        broadcastCollection.document("broadcasting")
+        broadcastCollection.document(Contact)
             .set(info)
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
         return true
+
 
     }
 }

@@ -202,7 +202,9 @@ public class ContactService() : Service(), CoroutineScope {
     fun advertiseUniqueID () {
 
         val adapter : BluetoothAdapter? =  BluetoothAdapter.getDefaultAdapter()
-        adapter?.setName("NODE")
+        val display_name = Build.MODEL
+        //adapter?.setName("NODE")
+        adapter?.setName(display_name)
 
         bleAdvertiser = BleAdvertiser()
 
@@ -210,6 +212,10 @@ public class ContactService() : Service(), CoroutineScope {
 
         val advertisement = AdvertiseData.Builder()
             .addManufacturerData(NODE_IDENTIFIER, randomUUID)
+            //.setIncludeDeviceName(true)
+            .build()
+
+        val advScanResponse = AdvertiseData.Builder()
             .setIncludeDeviceName(true)
             .build()
 
@@ -219,7 +225,7 @@ public class ContactService() : Service(), CoroutineScope {
             .setConnectable(false)
             .build()
 
-        bleAdvertiser?.advertiseData(advertisement, settings)
+        bleAdvertiser?.advertiseData(advertisement,advScanResponse, settings)
     }
 
     /**
@@ -242,7 +248,7 @@ public class ContactService() : Service(), CoroutineScope {
 
         backgroundScanner?.scanLeDevice(object : OnAdvertisementFound {
             override fun onAdvertisementFound(result: ScanResult) {
-                val device = result.device
+                val device = result.device.name
                 val data = result.scanRecord?.getManufacturerSpecificData(NODE_IDENTIFIER)
 
                 val newDeviceFound = hasNewDeviceBeenFound(result)
@@ -253,13 +259,14 @@ public class ContactService() : Service(), CoroutineScope {
                         byteArrayToHexString(it)
                     }
                     val broadcast: Intent = Intent(ContactService.NODE_FOUND)
-                        .putExtra("FOUND_ID", nodeID)
+                        //.putExtra("FOUND_ID", nodeID)
+                        .putExtra("FOUND_ID", device)
 
                     LocalBroadcastManager.getInstance(baseContext).sendBroadcast(broadcast)
 
                     Toast.makeText(
                         applicationContext,
-                        "Found device:  ${nodeID}",
+                        "Found device:  ${device}",
                         Toast.LENGTH_LONG
                     ).show()
                 }

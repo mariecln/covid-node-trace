@@ -11,11 +11,11 @@ import android.os.IBinder
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
-import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
@@ -25,10 +25,14 @@ import com.covid.nodetrace.permissions.PermissionRationale
 import com.covid.nodetrace.permissions.Permissions
 import com.covid.nodetrace.permissions.Permissions.requiredPermissions
 import com.covid.nodetrace.ui.AppViewModel
-import com.covid.nodetrace.util.DataFormatter
 import com.covid.nodetrace.util.NetworkHelper
 import com.covid.nodetrace.workmanager.RefreshDataWorker
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.CoroutineContext
@@ -89,6 +93,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             // not when it stops itself or is stopped by the activity.
             // It will be called only when there is critically low memory, in practice never
             // when the activity is in foreground.
+            auth.signOut()
             mService = null
             onServiceUnbound()
         }
@@ -104,12 +109,12 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         auth = FirebaseAuth.getInstance()
         authenticateUser(auth)
 
-        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+        val sharedPref = getPreferences(MODE_PRIVATE)
         communicationType = ContactService.CommunicationType.values()[sharedPref.getInt(getString(R.string.communication_type_state), 0)]
 
         //Starts the Contact Trace Service
         Intent(this, ContactService::class.java).also { intent ->
-            bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE)
+            bindService(intent, mServiceConnection, BIND_AUTO_CREATE)
         }
 
         //Listen for changes in the communication type set by the user in the app
@@ -136,7 +141,11 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             val permissionRationale : PermissionRationale = PermissionRationale()
             permissionRationale.showRationale(this, PermissionHelper.Companion.PERMISSION_REQUEST_CODE)
         }
-
+        // Check if user is signed in (non-null) and update UI accordingly.
+        val currentUser = auth.currentUser
+        if(currentUser != null){
+            //reload();
+        }
 
         //Load screen that was open the previous time the app was closed
         val sharedPref = getPreferences(Context.MODE_PRIVATE)
@@ -244,13 +253,35 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
      * Authenticates an anonymous user of the app. The user doesn't need to sign up or sign in
      */
     private fun authenticateUser(firebaseAuth: FirebaseAuth) {
-        firebaseAuth.signInAnonymously().addOnCompleteListener(this) { task ->
+        /*firebaseAuth.signInAnonymously().addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
                 Log.d(TAG, "signInAnonymously:success")
                 val user = auth.currentUser
             } else {
                 Log.w(TAG, "signInAnonymously:failure", task.exception)
             }
+        }*/
+
+        if (firebaseAuth.getCurrentUser() != null) {
+            firebaseAuth.getCurrentUser()!!.reload()
+        } else {
+             firebaseAuth.signInAnonymously()
+                .addOnCompleteListener(this@MainActivity,
+                    OnCompleteListener<AuthResult?> { task ->
+                        Log.d("FirebaseAuth", "signInAnonymously:onComplete:" + task.isSuccessful)
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful) {
+                            Log.w("FirebaseAuth", "signInAnonymously", task.exception)
+                            Toast.makeText(
+                                this@MainActivity, "Authentication failed.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        // ...
+                    })
         }
     }
 
