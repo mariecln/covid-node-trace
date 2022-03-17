@@ -248,7 +248,8 @@ public class ContactService() : Service(), CoroutineScope {
 
         backgroundScanner?.scanLeDevice(object : OnAdvertisementFound {
             override fun onAdvertisementFound(result: ScanResult) {
-                val device = result.device.name
+                val device = result.device
+                val device_name = result.device.name
                 val data = result.scanRecord?.getManufacturerSpecificData(NODE_IDENTIFIER)
 
                 val newDeviceFound = hasNewDeviceBeenFound(result)
@@ -259,14 +260,13 @@ public class ContactService() : Service(), CoroutineScope {
                         byteArrayToHexString(it)
                     }
                     val broadcast: Intent = Intent(ContactService.NODE_FOUND)
-                        //.putExtra("FOUND_ID", nodeID)
-                        .putExtra("FOUND_ID", device)
+                        .putExtra("FOUND_ID", nodeID)
 
                     LocalBroadcastManager.getInstance(baseContext).sendBroadcast(broadcast)
 
                     Toast.makeText(
                         applicationContext,
-                        "Found device:  ${device}",
+                        "Found device:  ${device_name}",
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -320,7 +320,8 @@ public class ContactService() : Service(), CoroutineScope {
 
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(broadcast)
 
-                removeDeviceFromFoundList(device.key)
+                iterator.remove()
+                //removeDeviceFromFoundList(device.key)
             }
         }
     }
