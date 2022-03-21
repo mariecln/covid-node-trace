@@ -29,7 +29,7 @@ public class ContactService() : Service(), CoroutineScope {
 
     companion object {
         // Consider the device out of range if no advertisements are found for 8 seconds
-        val CONTACT_OUT_OF_RANGE_TIMEOUT : Int = 8
+        val CONTACT_OUT_OF_RANGE_TIMEOUT : Int = 11
 
         public final val NODE_IDENTIFIER = 0xFFFF
 
@@ -206,6 +206,7 @@ public class ContactService() : Service(), CoroutineScope {
         //adapter?.setName("NODE")
         adapter?.setName(display_name)
 
+
         bleAdvertiser = BleAdvertiser()
 
         val randomUUID = UUID.randomUUID().toString().toByteArray().copyOfRange(0, 16)
@@ -312,7 +313,7 @@ public class ContactService() : Service(), CoroutineScope {
                     byteArrayToHexString(it)
                 }
                 this.launch(Dispatchers.Main) {
-                    Toast.makeText(applicationContext, "Lost device:  ${nodeID}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, "Lost device:  ${device.value.device.name}", Toast.LENGTH_LONG).show()
                 }
 
                 val broadcast: Intent = Intent(ContactService.NODE_LOST)

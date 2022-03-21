@@ -22,6 +22,9 @@ import com.covid.nodetrace.database.AppDatabase
 import com.covid.nodetrace.database.DatabaseFactory
 import com.covid.nodetrace.permissions.Permissions
 import com.covid.nodetrace.ui.AppViewModel
+import com.covid.nodetrace.util.DataFormatter.createDateFormat
+import com.covid.nodetrace.util.DataFormatter.createDurationFormat
+import com.covid.nodetrace.util.DataFormatter.createShortDateFormat
 import kotlinx.coroutines.*
 import kotlin.collections.HashSet
 import kotlin.coroutines.CoroutineContext
@@ -190,6 +193,7 @@ class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewM
      */
     fun createNewContact(ID: String) : Contact {
         val date = getCurrentUnixDate()
+        val date_really : String? = createDateFormat(date)
         val location : Location? = getCurrentLocation()
 
         if (location != null)
@@ -223,6 +227,7 @@ class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewM
         for (contact in contacts) {
             if (contact.ID == ID) {
                 contact.duration = contactEnd - contact.date
+                createDateFormat(contact.duration)
                 return contact
             }
         }
