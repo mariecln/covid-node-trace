@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.NumberPicker
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.covid.nodetrace.Contact
@@ -53,9 +54,9 @@ class HealthStatusFragment : Fragment(), CoroutineScope {
         healthStatus?.setDisplayedValues(statusDescription)
 
         val healthStatusFromStorage: Int = sharedPref.getInt(getString(R.string.health_status), 0)
-        checkButtonState(healthStatusFromStorage)
+        //checkButtonState(healthStatusFromStorage)
 
-        healthStatus.setOnValueChangedListener { picker, oldVal, newVal ->
+/*        healthStatus.setOnValueChangedListener { picker, oldVal, newVal ->
             val newStatus = statuses[newVal]
             val currentStatus: Int = sharedPref.getInt(getString(R.string.health_status), 0)
 
@@ -69,6 +70,21 @@ class HealthStatusFragment : Fragment(), CoroutineScope {
                 putInt(resources.getString(R.string.health_status), newVal)
                 apply()
             }
+        }*/
+
+        updateHealthStatusButton.setOnClickListener{
+            val newStatus = healthStatus.value
+
+            if (statuses[newStatus] == statuses.elementAt(1)) {
+                postUpdatedHealthStatusToDatabase()
+            }
+
+            Toast.makeText(
+                context,
+                "Your status is :  ${statuses[newStatus]}",
+                Toast.LENGTH_LONG
+            ).show()
+
         }
     }
 

@@ -193,7 +193,6 @@ class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewM
      */
     fun createNewContact(ID: String) : Contact {
         val date = getCurrentUnixDate()
-        val date_really : String? = createDateFormat(date)
         val location : Location? = getCurrentLocation()
 
         if (location != null)
@@ -285,7 +284,7 @@ class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewM
         //If location permission has not been granted have to stop as we can't request permission while the app is in the background
         if (!Permissions.hasPermissions(
                 mContext!!,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
             )) {
             return null
         }

@@ -79,6 +79,7 @@ class BleScanner {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
             super.onScanResult(callbackType, result)
             val device = result.device
+            val device_name = result.device.name
 
             val manufacturerSpecificData = result.scanRecord!!.getManufacturerSpecificData(ContactService.NODE_IDENTIFIER)
             if (manufacturerSpecificData != null) {

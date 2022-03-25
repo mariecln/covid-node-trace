@@ -205,6 +205,7 @@ public class ContactService() : Service(), CoroutineScope {
         val display_name = Build.MODEL
         //adapter?.setName("NODE")
         adapter?.setName(display_name)
+        val device_address = adapter?.address
 
 
         bleAdvertiser = BleAdvertiser()
@@ -253,6 +254,7 @@ public class ContactService() : Service(), CoroutineScope {
                 val device_name = result.device.name
                 val data = result.scanRecord?.getManufacturerSpecificData(NODE_IDENTIFIER)
 
+                val device_address = result.device.address
                 val newDeviceFound = hasNewDeviceBeenFound(result)
                 foundDevices.set(result.device.address, result)
 
