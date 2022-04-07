@@ -11,6 +11,7 @@ import android.os.IBinder
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -34,6 +35,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
+import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.CoroutineContext
 
@@ -53,7 +55,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     private val model: AppViewModel by viewModels()
     override val coroutineContext: CoroutineContext = Dispatchers.Main + SupervisorJob()
     private lateinit var auth: FirebaseAuth
-    private lateinit var appDatabase : AppDatabase
+    var resetBLE : Timer? = null
 
     private lateinit var contactManager : ContactManager
     private var contactService : ContactService? = null
@@ -171,6 +173,25 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
         WorkManager.getInstance(applicationContext).enqueue(periodicWorkRequest)
     }
+/*    private fun restartCommunication()
+    {
+        resetBLE = Timer()
+        resetBLE?.schedule(object : TimerTask() {
+            override fun run() {
+                runOnUiThread(object : Runnable
+                {
+                    override fun run() {
+                        onServiceUnbound()
+                        onServiceBound(mService)
+                        Log.d("my task : ", "used")
+                    }
+
+                });
+
+            }
+        }, 1, 600000)
+    }*/
+
 
     /**
      * Inflate the menu; this adds items to the action bar if it is present.
@@ -192,15 +213,15 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             R.id.welcome_menu -> {
                 showScreen(Screens.WELCOME)
             }
-            R.id.health_status_menu -> {
+            /*R.id.health_status_menu -> {
                 showScreen(Screens.HEALTH_STATUS)
-            }
+            }*/
             R.id.contact_menu -> {
                 showScreen(Screens.CONTACT)
             }
-            R.id.settings_menu -> {
+            /*R.id.settings_menu -> {
                 showScreen(Screens.SETTINGS)
-            }
+            }*/
             else -> {
                 return super.onOptionsItemSelected(item)
             }
@@ -298,15 +319,15 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             Screens.WELCOME -> {
                 findNavController(R.id.nav_host_fragment).navigate(R.id.welcome_fragment)
             }
-            Screens.HEALTH_STATUS -> {
+            /*Screens.HEALTH_STATUS -> {
                 findNavController(R.id.nav_host_fragment).navigate(R.id.health_status_fragment)
-            }
+            }*/
             Screens.CONTACT -> {
                 findNavController(R.id.nav_host_fragment).navigate(R.id.contact_fragment)
             }
-            Screens.SETTINGS -> {
+            /*Screens.SETTINGS -> {
                 findNavController(R.id.nav_host_fragment).navigate(R.id.settings_fragment)
-            }
+            }*/
         }
     }
 }

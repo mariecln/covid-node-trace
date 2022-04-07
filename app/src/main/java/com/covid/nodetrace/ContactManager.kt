@@ -23,9 +23,9 @@ import com.covid.nodetrace.database.DatabaseFactory
 import com.covid.nodetrace.permissions.Permissions
 import com.covid.nodetrace.ui.AppViewModel
 import com.covid.nodetrace.util.DataFormatter.createDateFormat
-import com.covid.nodetrace.util.DataFormatter.createDurationFormat
-import com.covid.nodetrace.util.DataFormatter.createShortDateFormat
 import kotlinx.coroutines.*
+import java.util.*
+import kotlin.collections.HashMap
 import kotlin.collections.HashSet
 import kotlin.coroutines.CoroutineContext
 
@@ -69,7 +69,6 @@ class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewM
                 when (action) {
                     NODE_FOUND -> {
                         val foundID: String? = intent.getStringExtra("FOUND_ID")
-
                         if (foundID == null)
                             return
 
@@ -92,7 +91,6 @@ class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewM
                             return
 
                         val contact: Contact? = updateContactDuration(lostID, getCurrentUnixDate())
-
                         //If contact can't be found we do not insert it into the database
                         if (contact == null)
                             return
@@ -106,6 +104,7 @@ class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewM
 
                             contact.rssi = rssiValue
                         }
+                        contacts.remove(contact)
 
                         insertContact(contact)
                         updateUserInterfaceWithContactHistory()
@@ -196,7 +195,9 @@ class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewM
         val location : Location? = getCurrentLocation()
 
         if (location != null)
+        {
             return Contact(ID, date, location.latitude, location.longitude)
+        }
         else {
             return Contact(ID, date)
         }
@@ -237,6 +238,8 @@ class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewM
      * Insert a contact into the local database
      */
     fun insertContact(contact: Contact) {
+        val uuid = UUID.randomUUID().toString().toByteArray().copyOfRange(0, 16)
+        contact.ID = uuid.toString()
         this.launch(Dispatchers.IO) {
             appDatabase.contactDao().insert(contact)
         }

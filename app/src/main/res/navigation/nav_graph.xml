@@ -11,11 +11,11 @@
         android:label="@string/welcome_fragment_label"
         tools:layout="@layout/welcome_screen">
 
-        <action
+<!--        <action
             android:id="@+id/action_WelcomeFragment_to_HealthStatusFragment"
-            app:destination="@id/health_status_fragment" />
+            app:destination="@id/health_status_fragment" />-->
     </fragment>
-    <fragment
+<!--    <fragment
         android:id="@+id/health_status_fragment"
         android:name="com.covid.nodetrace.ui.HealthStatusFragment"
         android:label="@string/health_status_fragment_label"
@@ -24,17 +24,17 @@
         <action
             android:id="@+id/action_HealthStatusFragment_to_ContactFragment"
             app:destination="@id/contact_fragment" />
-    </fragment>
+    </fragment>-->
     <fragment
         android:id="@+id/contact_fragment"
         android:name="com.covid.nodetrace.ui.ContactFragment"
         android:label="@string/contact_fragment_label"
         tools:layout="@layout/contact_screen">
     </fragment>
-    <fragment
+<!--    <fragment
         android:id="@+id/settings_fragment"
         android:name="com.covid.nodetrace.ui.SettingsFragment"
         android:label="@string/settings_fragment_label"
         tools:layout="@layout/settings_screen">
-    </fragment>
+    </fragment>-->
 </navigation>

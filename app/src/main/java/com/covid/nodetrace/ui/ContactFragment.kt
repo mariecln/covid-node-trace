@@ -6,17 +6,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import com.covid.nodetrace.Contact
+import com.covid.nodetrace.ContactManager
 import com.covid.nodetrace.HealthStatus
 import com.covid.nodetrace.R
+import com.covid.nodetrace.database.AppDatabase
+import com.covid.nodetrace.database.DatabaseFactory
 import com.covid.nodetrace.util.DataFormatter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
+import kotlin.coroutines.CoroutineContext
 
 
 /**
@@ -68,6 +79,7 @@ class ContactFragment : Fragment() {
 
         initializeBottomSheet()
         listenForContactUpdates()
+
     }
 
     /**

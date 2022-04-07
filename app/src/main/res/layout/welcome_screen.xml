@@ -56,6 +56,7 @@
                 android:background="@color/colorPrimary"
                 android:textColor="@color/white"
                 android:text="@string/welcome_screen_button"/>
+
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,6 +10,7 @@ import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat
 import no.nordicsemi.android.support.v18.scanner.ScanCallback
 import no.nordicsemi.android.support.v18.scanner.ScanResult
 import no.nordicsemi.android.support.v18.scanner.ScanSettings
+import java.util.*
 
 class BleScanner {
 
@@ -78,8 +79,6 @@ class BleScanner {
     private var mLeScanCallback: ScanCallback? = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
             super.onScanResult(callbackType, result)
-            val device = result.device
-            val device_name = result.device.name
 
             val manufacturerSpecificData = result.scanRecord!!.getManufacturerSpecificData(ContactService.NODE_IDENTIFIER)
             if (manufacturerSpecificData != null) {
@@ -87,6 +86,7 @@ class BleScanner {
             }
         }
     }
+
 
     /**
      * Stop scanning for BLE devices.

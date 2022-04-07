@@ -20,8 +20,7 @@ object Permissions  {
      * @see READ_EXTERNAL_STORAGE to read data from the local Room database
      */
     public val requiredPermissions: Array<String> = arrayOf(
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_COARSE_LOCATION
+        Manifest.permission.ACCESS_FINE_LOCATION
     )
 
     private val PERMISSION_REQUEST_CODE =  0x78

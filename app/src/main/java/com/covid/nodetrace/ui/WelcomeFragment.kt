@@ -9,9 +9,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
+import com.covid.nodetrace.Contact
+import com.covid.nodetrace.ContactManager
 import com.covid.nodetrace.R
+import com.covid.nodetrace.database.AppDatabase
+import com.covid.nodetrace.database.DatabaseFactory
 import com.covid.nodetrace.permissions.PermissionHelper
 import com.covid.nodetrace.permissions.PermissionRationale
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
+import kotlin.coroutines.CoroutineContext
 
 /**
  * The first screen that a new user of the app sees.
@@ -28,9 +38,13 @@ class WelcomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val button = view.findViewById<Button>(R.id.welcome_screen_button)
+        button.visibility= View.INVISIBLE
 
-        button.setOnClickListener {
+
+/*        button.setOnClickListener {
             findNavController().navigate(R.id.health_status_fragment)
-        }
+        }*/
+
+
     }
 }

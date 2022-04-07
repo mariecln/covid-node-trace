@@ -47,6 +47,4 @@ class RefreshDataWorker(context: Context, workerParams : WorkerParameters) :
             return Result.success();
         }
     }
-
-
 }
