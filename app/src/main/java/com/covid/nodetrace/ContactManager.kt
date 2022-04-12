@@ -73,7 +73,7 @@ class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewM
                             return
 
                         val contact = createNewContact(foundID)
-                        contacts?.add(contact)
+                        contacts.add(contact)
                     }
                     UPDATE_RSSI -> {
                         val ID = intent.getStringExtra("ID")
@@ -85,15 +85,11 @@ class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewM
                         updateContactSignalStrength(ID, rssi)
                     }
                     NODE_LOST -> {
-                        val lostID = intent.getStringExtra("LOST_ID")
+                        val lostID = intent.getStringExtra("LOST_ID") ?: return
 
-                        if (lostID == null)
-                            return
-
-                        val contact: Contact? = updateContactDuration(lostID, getCurrentUnixDate())
-                        //If contact can't be found we do not insert it into the database
-                        if (contact == null)
-                            return
+                        val contact: Contact =
+                            updateContactDuration(lostID, getCurrentUnixDate()) ?: return
+                        Log.d("Database", "contact lost is "+contact)
 
                         if (rssiEntries[lostID] != null) {
                             var rssiValue : Int = 0;
@@ -104,10 +100,9 @@ class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewM
 
                             contact.rssi = rssiValue
                         }
-                        contacts.remove(contact)
-
                         insertContact(contact)
                         updateUserInterfaceWithContactHistory()
+                        contacts.remove(contact)
                     }
                 }
             }
@@ -119,6 +114,7 @@ class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewM
      * Contact page of the app
      */
     fun updateUserInterfaceWithContactHistory () {
+        Log.d("Database", "Update Interface")
         this.launch(Dispatchers.IO) {
             val allContacts : List<Contact> = appDatabase.contactDao().getAll()
 
@@ -238,10 +234,11 @@ class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewM
      * Insert a contact into the local database
      */
     fun insertContact(contact: Contact) {
+        Log.d("Database", "Insert to database")
         val uuid = UUID.randomUUID().toString().toByteArray().copyOfRange(0, 16)
         contact.ID = uuid.toString()
         this.launch(Dispatchers.IO) {
-            appDatabase.contactDao().insert(contact)
+            val verif = appDatabase.contactDao().insert(contact)
         }
     }
 

@@ -1,6 +1,7 @@
 package com.covid.nodetrace
 
 import android.app.Service
+import android.bluetooth.BluetoothAdapter
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -143,6 +144,11 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             val permissionRationale : PermissionRationale = PermissionRationale()
             permissionRationale.showRationale(this, PermissionHelper.Companion.PERMISSION_REQUEST_CODE)
         }
+        else
+        {
+            val mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+            mBluetoothAdapter.enable();
+        }
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
         if(currentUser != null){
@@ -156,7 +162,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
         contactManager.checkForRiskContacts()
         setPeriodicWorkRequest()
-
     }
 
     private fun setPeriodicWorkRequest() {
@@ -164,7 +169,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         val constraints= androidx.work.Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
-
 
         var periodicWorkRequest =
             PeriodicWorkRequest.Builder(RefreshDataWorker::class.java, 1, TimeUnit.DAYS)
@@ -246,7 +250,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     }
     override fun onDestroy() {
         super.onDestroy()
-
         coroutineContext[Job]!!.cancel()
     }
 
@@ -309,7 +312,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
      * local storage so that the next time the app is used it will start on that screen
      */
     fun showScreen(screen: Screens) {
-
         with(getPreferences(Context.MODE_PRIVATE).edit()) {
             putInt(resources.getString(R.string.screen_state), screen.ordinal)
             apply()

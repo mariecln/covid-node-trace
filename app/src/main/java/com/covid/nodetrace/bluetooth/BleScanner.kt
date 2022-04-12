@@ -56,10 +56,11 @@ class BleScanner {
             return
         } else if (!mBluetoothAdapter.isEnabled) {
             // Bluetooth is not enabled
+            mBluetoothAdapter.enable();
             return
         }
         val builder = ScanSettings.Builder()
-            .setScanMode(ScanSettings.SCAN_MODE_BALANCED)
+            .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.setCallbackType(android.bluetooth.le.ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
         }

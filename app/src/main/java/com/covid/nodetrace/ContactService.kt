@@ -30,7 +30,7 @@ public class ContactService() : Service(), CoroutineScope {
 
     companion object {
         // Consider the device out of range if no advertisements are found for 11 seconds
-        val CONTACT_OUT_OF_RANGE_TIMEOUT : Int = 30
+        val CONTACT_OUT_OF_RANGE_TIMEOUT : Int = 12
 
         public final val NODE_IDENTIFIER = 0xFFFF
 
@@ -254,7 +254,7 @@ public class ContactService() : Service(), CoroutineScope {
             .build()
 
         val settings = AdvertiseSettings.Builder()
-            .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_POWER)
+            .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
             .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
             .setTimeout(0)
             .setConnectable(false)
@@ -380,11 +380,12 @@ public class ContactService() : Service(), CoroutineScope {
             val currentDate = Date()
             val diff: Long = currentDate.getTime() - other_duration.getTime()
             val seconds = (diff / 1000).toInt()
+            Log.d("Time", "LOST ID ContactService name is "+device.device.name)
+            Log.d("Time", "second is  "+seconds)
 
 
             if (seconds > CONTACT_OUT_OF_RANGE_TIMEOUT) {
-                Log.d("Time", "LOST ID ContactService name is "+device.device.name)
-                Log.d("Time", "LOST ID seconds "+seconds)
+                Log.d("Time", "LOST ID")
                 val nodeID = device.scanRecord?.getManufacturerSpecificData(NODE_IDENTIFIER)?.let {
                     byteArrayToHexString(it)
                 }
