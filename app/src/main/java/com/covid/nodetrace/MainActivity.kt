@@ -1,14 +1,14 @@
 package com.covid.nodetrace
 
+import android.app.AlertDialog
 import android.app.Service
 import android.bluetooth.BluetoothAdapter
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.content.*
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -148,6 +148,29 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         {
             val mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
             mBluetoothAdapter.enable();
+            val locationManager: LocationManager = getSystemService(LOCATION_SERVICE) as LocationManager
+            var GpsStatus: Boolean = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            if (!GpsStatus)
+            {
+                val dialog: AlertDialog.Builder = AlertDialog.Builder(this)
+                dialog.setMessage("Please activate your location and reopen the app \n If you want to be redirect into the settings page, select YES")
+                dialog.setTitle("Information")
+                dialog.setPositiveButton("YES",
+                    DialogInterface.OnClickListener { dialog, which ->
+                        val intent1:Intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(intent1);
+                    })
+                dialog.setNegativeButton("cancel",
+                    DialogInterface.OnClickListener { dialog, which ->
+                        Toast.makeText(
+                            applicationContext,
+                            "App can´t be use properly",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    })
+                val alertDialog: AlertDialog = dialog.create()
+                alertDialog.show()
+            }
         }
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
