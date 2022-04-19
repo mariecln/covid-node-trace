@@ -89,13 +89,15 @@ class FirebaseDatabase () : FirebaseDao {
         TODO("Not yet implemented")
     }
 
-    override suspend fun addBroadcast(Contact : String, Date : String, Location : String, Duration : String, Rssi : String) : Boolean {
+    override suspend fun addBroadcast(Contact : String, ContactName : String, Date : String, Location : String, Duration : String, Rssi : String, Name : String) : Boolean {
         val info = hashMapOf(
             "contact" to Contact,
+            "contact_name" to ContactName,
             "date" to Date,
             "location" to Location,
             "duration" to Duration,
-            "rssi" to Rssi
+            "rssi" to Rssi,
+            "device_name" to Name
         )
 
         broadcastCollection.document(Contact)
