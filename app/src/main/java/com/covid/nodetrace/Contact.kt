@@ -21,6 +21,7 @@ public enum class HealthStatus {
 @Entity
 open class Contact (
     @PrimaryKey open var ID : String,
+    @ColumnInfo(name = "name") open val name : String,
     @ColumnInfo(name = "date") open val date : Long,
     @ColumnInfo(name = "latitude") open var latitude : Double = 0.0,
     @ColumnInfo(name = "longitude") open var longitude : Double = 0.0,

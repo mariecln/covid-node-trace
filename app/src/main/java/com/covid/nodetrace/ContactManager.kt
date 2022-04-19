@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Context.LOCATION_SERVICE
 import android.content.Intent
+import android.content.Intent.getIntent
 import android.content.IntentFilter
 import android.location.Location
 import android.location.LocationManager
@@ -15,9 +16,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.covid.nodetrace.ContactService.Companion.UPDATE_RSSI
 import com.covid.nodetrace.ContactService.Companion.NODE_FOUND
 import com.covid.nodetrace.ContactService.Companion.NODE_LOST
+import com.covid.nodetrace.ContactService.Companion.UPDATE_RSSI
 import com.covid.nodetrace.database.AppDatabase
 import com.covid.nodetrace.database.DatabaseFactory
 import com.covid.nodetrace.permissions.Permissions
@@ -25,9 +26,8 @@ import com.covid.nodetrace.ui.AppViewModel
 import com.covid.nodetrace.util.DataFormatter.createDateFormat
 import kotlinx.coroutines.*
 import java.util.*
-import kotlin.collections.HashMap
-import kotlin.collections.HashSet
 import kotlin.coroutines.CoroutineContext
+
 
 class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewModel) : LifecycleObserver, CoroutineScope {
     private val TAG = "ContactManager"
@@ -68,11 +68,17 @@ class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewM
                 val action = intent.action
                 when (action) {
                     NODE_FOUND -> {
-                        val foundID: String? = intent.getStringExtra("FOUND_ID")
+                        /*val foundID: String? = intent.getStringExtra("FOUND_ID")*/
+
+                        val extras = intent.extras
+                        val foundID = extras!!.getString("FOUND_ID")
+                        val name = extras!!.getString("NAME")
                         if (foundID == null)
                             return
+                        if (name == null)
+                            return
 
-                        val contact = createNewContact(foundID)
+                        val contact = createNewContact(foundID, name)
                         contacts.add(contact)
                     }
                     UPDATE_RSSI -> {
@@ -109,6 +115,7 @@ class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewM
         }
     }
 
+
     /**
      * Fetches all the found contacts from the local database and displays them within the
      * Contact page of the app
@@ -132,6 +139,7 @@ class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewM
                 println(
                     "Contact -> " +
                             " ID: ${contact.ID}" +
+                            " contact_name: ${contact.name}" +
                             " date: ${contact.date}" +
                             " duration: " + "${contact.duration / 1000f} sec" +
                             " rssi: " + "${contact.rssi} dB" +
@@ -186,16 +194,16 @@ class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewM
      * Creates a new Contact based on a 128-bit UUID. The moment the function is
      * called it logs the current Unix date and attempts to get the location (if permission is given)
      */
-    fun createNewContact(ID: String) : Contact {
+    fun createNewContact(ID: String, name : String) : Contact {
         val date = getCurrentUnixDate()
         val location : Location? = getCurrentLocation()
 
         if (location != null)
         {
-            return Contact(ID, date, location.latitude, location.longitude)
+            return Contact(ID, name, date, location.latitude, location.longitude)
         }
         else {
-            return Contact(ID, date)
+            return Contact(ID, name, date)
         }
     }
 

@@ -78,6 +78,7 @@ class ContactHistoryAdapter(context: Context) : BaseAdapter() {
         val status : HealthStatus = HealthStatus.valueOf(contact.healthStatus)
 
         row.contactHealthStatus.text = DataFormatter.createHealthStatusFormat(status)
+        row.contactName.text = contact.name
         row.contactDate.text = DataFormatter.createShortDateFormat(contact.date)
         row.contactDuration.text = DataFormatter.createDurationFormat(contact.duration)
         row.contactLocation.text = DataFormatter.createLocationFormat(contact.latitude, contact.longitude)
@@ -99,6 +100,7 @@ public enum class TimeRange {
  */
 private class ContactRow(row: View?) {
     public val contactHealthStatus: TextView
+    public val contactName: TextView
     public val contactDate: TextView
     public val contactDuration: TextView
     public val contactLocation: TextView
@@ -106,6 +108,7 @@ private class ContactRow(row: View?) {
 
     init {
         contactHealthStatus = row?.findViewById(R.id.row_contact_health_status) as TextView
+        contactName = row?.findViewById(R.id.row_contact_name) as TextView
         contactDate = row?.findViewById(R.id.row_contact_date) as TextView
         contactDuration = row?.findViewById(R.id.row_contact_duration) as TextView
         contactLocation = row?.findViewById(R.id.row_contact_location) as TextView

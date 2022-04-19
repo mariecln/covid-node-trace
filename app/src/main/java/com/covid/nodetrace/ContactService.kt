@@ -5,10 +5,7 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.le.AdvertiseData
 import android.bluetooth.le.AdvertiseSettings
 import android.content.Intent
-import android.os.Binder
-import android.os.Build
-import android.os.IBinder
-import android.os.SystemClock
+import android.os.*
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
@@ -305,10 +302,16 @@ public class ContactService() : Service(), CoroutineScope {
                         foundDevices.add(nodeID)
                     }
 
-                    val broadcast: Intent = Intent(ContactService.NODE_FOUND)
-                        .putExtra("FOUND_ID", nodeID)
+                    /*val broadcast: Intent = Intent(ContactService.NODE_FOUND)
+                        .putExtra("FOUND_ID", nodeID)*/
 
+                    val broadcast = Intent(ContactService.NODE_FOUND)
+                    val extras = Bundle()
+                    extras.putString("FOUND_ID", nodeID)
+                    extras.putString("NAME", device_name)
+                    broadcast.putExtras(extras)
                     LocalBroadcastManager.getInstance(baseContext).sendBroadcast(broadcast)
+
 
                     Toast.makeText(
                         applicationContext,

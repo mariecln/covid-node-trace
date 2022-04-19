@@ -31,11 +31,13 @@
 
     <string name="health_title">Health status</string>
     <string name="contact_health_status">""</string>
+    <string name="contact_name">""</string>
     <string name="contact_date">""</string>
     <string name="contact_time">""</string>
     <string name="contact_duration">""</string>
     <string name="contact_rssi">""</string>
 
+    <string name="name_title">"Contact Name"</string>
     <string name="date_title">"Date"</string>
     <string name="duration_title">"Duration"</string>
     <string name="distance_title">"Distance"</string>
@@ -44,6 +46,7 @@
 
     <string name="history_sheet_title">Contacts</string>
     <string name="row_contact_health_status">"Status"</string>
+    <string name="row_contact_name">"Name"</string>
     <string name="row_contact_date">"Date"</string>
     <string name="row_contact_duration">"Duration"</string>
     <string name="row_contact_distance">"Distance"</string>

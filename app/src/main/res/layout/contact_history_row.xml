@@ -28,10 +28,25 @@
             android:clickable="false"/>
 
         <TextView
+            android:id="@+id/row_contact_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.7"
+            app:layout_anchorGravity="right|center_vertical"
+            android:gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="5dp"
+            android:text="@string/row_contact_date"
+            android:textSize="12sp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:clickable="false"/>
+
+        <TextView
             android:id="@+id/row_contact_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1.3"
+            android:layout_weight="1"
             app:layout_anchorGravity="right|center_vertical"
             android:gravity="center_vertical"
             android:layout_centerVertical="true"
@@ -47,7 +62,7 @@
             android:id="@+id/row_contact_duration"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.7"
             app:layout_anchor="@+id/row_contact_date"
             app:layout_anchorGravity="right|center_vertical"
             android:gravity="center_vertical"

@@ -44,11 +44,13 @@ class ContactFragment : Fragment() {
     private lateinit var sheetBehavior : BottomSheetBehavior<NestedScrollView>
 
     private lateinit var healthStatusTitle : TextView
+    private lateinit var nameTitle : TextView
     private lateinit var dateTitle : TextView
     private lateinit var durationTitle : TextView
     private lateinit var rssiTitle : TextView
 
     private lateinit var contactHealthStatus : TextView
+    private lateinit var contactName : TextView
     private lateinit var contactDate : TextView
     private lateinit var contactDuration : TextView
     private lateinit var contactRssi : TextView
@@ -68,11 +70,13 @@ class ContactFragment : Fragment() {
         contactHistoryListView = view.findViewById(R.id.contact_history_list_view) as ListView
 
         healthStatusTitle = view.findViewById(R.id.health_title) as TextView
+        nameTitle = view.findViewById(R.id.name_title) as TextView
         dateTitle = view.findViewById(R.id.date_title) as TextView
         durationTitle = view.findViewById(R.id.duration_title) as TextView
         rssiTitle = view.findViewById(R.id.rssi_title) as TextView
 
         contactHealthStatus = view.findViewById(R.id.contact_health_status) as TextView
+        contactName = view.findViewById(R.id.contact_name) as TextView
         contactDate = view.findViewById(R.id.contact_date) as TextView
         contactDuration = view.findViewById(R.id.contact_duration) as TextView
         contactRssi = view.findViewById(R.id.contact_rssi) as TextView
@@ -153,6 +157,8 @@ class ContactFragment : Fragment() {
      */
     private fun displayContactData(contact : Contact) {
         healthStatusTitle.setVisibility(View.VISIBLE)
+
+        nameTitle.setVisibility(View.VISIBLE)
         dateTitle.setVisibility(View.VISIBLE)
         durationTitle.setVisibility(View.VISIBLE)
         rssiTitle.setVisibility(View.VISIBLE)
@@ -171,6 +177,7 @@ class ContactFragment : Fragment() {
 
         contactHealthStatus.setTextColor(textColor)
         contactHealthStatus.text = DataFormatter.createHealthStatusFormat(status)
+        contactName.text =contact.name.toString()
         contactDate.text =DataFormatter.createDateFormat(contact.date)
         contactDuration.text = DataFormatter.createDurationFormat(contact.duration)
         contactRssi.text = contact.rssi.toString()
