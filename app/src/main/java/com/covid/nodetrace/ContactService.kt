@@ -50,6 +50,7 @@ public class ContactService() : Service(), CoroutineScope {
     //var foundDevices = HashMap<String, ScanResult>()
     var arraylist = ArrayList<ScanResult>()
     var foundDevices = ArrayList<String>()
+    var resetScan : Timer? = null
 
     override val coroutineContext: CoroutineContext = Dispatchers.Main + SupervisorJob()
 
@@ -84,6 +85,7 @@ public class ContactService() : Service(), CoroutineScope {
          */
         fun startForegroundService(activity: Activity, communicationType: CommunicationType) {
             createForegroundService(activity, communicationType)
+
         }
 
         fun stopForegroundService() {
@@ -158,6 +160,17 @@ public class ContactService() : Service(), CoroutineScope {
         }
 
         startForeground(1, notification)
+
+        resetScan = Timer()
+        resetScan?.schedule(object : TimerTask() {
+            override fun run() {
+                activity.runOnUiThread(Runnable {
+                    Log.d("Scan", "resetScan")
+                    stopScanning()
+                    scanForNearbyDevices()
+                })
+            }
+        }, 1, 120000)
     }
 
     /**
@@ -291,6 +304,12 @@ public class ContactService() : Service(), CoroutineScope {
                 val device_address = result.device.address
 
                 val newDeviceFound = hasNewDeviceBeenFound(result)
+                Log.d("Database", "---------------- DEVICE --------------")
+               /* Log.d("Database", "NAME : "+device_name)
+                val nodeID = result.scanRecord?.getManufacturerSpecificData(NODE_IDENTIFIER)?.let {
+                    byteArrayToHexString(it)
+                }
+                Log.d("Database", "Manfacturer Data : "+nodeID)*/
 
                 if (newDeviceFound) {
                     Log.d("Database", "NEW DEVICE FOUND NAME : "+device_name)
@@ -347,7 +366,7 @@ public class ContactService() : Service(), CoroutineScope {
             if(nodeID == nodeIDFound)
             {
                 val index = arraylist.indexOf(element)
-                arraylist.set(index,result)
+                arraylist[index] = result
                 return false
             }
         }
@@ -444,6 +463,10 @@ public class ContactService() : Service(), CoroutineScope {
         deviceInRangeTask?.cancel()
         backgroundScanner?.stopScan()
         bleAdvertiser?.stopAdvertising()
+    }
+
+    fun stopScanning() {
+        backgroundScanner?.stopScan()
     }
 
     /**

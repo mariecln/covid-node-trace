@@ -38,16 +38,15 @@ class RefreshDataWorker(context: Context, workerParams : WorkerParameters) :
             duration = DataFormatter.createDurationFormat(contact.duration)
             rssi = contact.rssi.toString()
             device_name = Build.MODEL
+            val fileUploaded = DatabaseFactory.getFirebaseDatabase().addBroadcast(contact_ID, contact_name, date, location,  duration, rssi, device_name)
+            if (fileUploaded)
+                Log.d("Database", "Data add");
         }
         if (allContacts.isEmpty()) {
             Log.d("List", "empty");
             return Result.failure()
         }
         else{
-            val fileUploaded = DatabaseFactory.getFirebaseDatabase().addBroadcast(contact_ID, contact_name, date, location,  duration, rssi, device_name)
-
-            if (fileUploaded)
-                Log.d("Database", "Data add");
             Log.d("MyWorker", "worker start");
             return Result.success();
         }
