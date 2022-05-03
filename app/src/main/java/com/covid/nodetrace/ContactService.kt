@@ -161,16 +161,19 @@ public class ContactService() : Service(), CoroutineScope {
 
         startForeground(1, notification)
 
-        resetScan = Timer()
-        resetScan?.schedule(object : TimerTask() {
-            override fun run() {
-                activity.runOnUiThread(Runnable {
-                    Log.d("Scan", "resetScan")
-                    stopScanning()
-                    scanForNearbyDevices()
-                })
-            }
-        }, 1, 120000)
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R)
+        {
+            resetScan = Timer()
+            resetScan?.schedule(object : TimerTask() {
+                override fun run() {
+                    activity.runOnUiThread(Runnable {
+                        Log.d("Scan", "resetScan")
+                        stopScanning()
+                        scanForNearbyDevices()
+                    })
+                }
+            }, 1, 120000)
+        }
     }
 
     /**

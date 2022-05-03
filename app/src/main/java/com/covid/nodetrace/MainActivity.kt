@@ -202,6 +202,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     }
 /*    private fun restartCommunication()
     {
+        if
         resetBLE = Timer()
         resetBLE?.schedule(object : TimerTask() {
             override fun run() {
