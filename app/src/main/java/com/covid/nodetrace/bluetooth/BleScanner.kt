@@ -47,14 +47,18 @@ class BleScanner {
     fun scanLeDevice(callback: OnAdvertisementFound?) {
         advertisementFoundCallback = callback
         scanLeDevice()
-        /*resetScan = Timer()
-        resetScan?.schedule(object : TimerTask() {
-            override fun run() {
-                Log.d("Scan", "resetScan")
-                stopScan()
-                scanLeDevice()
-            }
-        }, 1, 1200000)*/
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R)
+        {
+            resetScan = Timer()
+            resetScan?.schedule(object : TimerTask() {
+                override fun run() {
+                    Log.d("Scan", "resetScan")
+                    stopScan()
+                    scanLeDevice()
+                }
+            }, 1, 1200000)
+        }
+
     }
 
     private fun scanLeDevice() {
@@ -72,7 +76,7 @@ class BleScanner {
         }
 
         val settingsBuilder = ScanSettings.Builder()
-            .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+            .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             settingsBuilder.setCallbackType(android.bluetooth.le.ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
         }
@@ -105,8 +109,7 @@ class BleScanner {
             .build()
 
         val filters : MutableList<ScanFilter> = mutableListOf()
-        filters!!.add(filter)
-
+        filters.add(filter)
 
         BluetoothLeScannerCompat.getScanner().startScan(filters, settings, mLeScanCallback!!)
 
@@ -121,7 +124,7 @@ class BleScanner {
             super.onScanResult(callbackType, result)
             Log.d("Scan","result"+result.device.name)
 
-            val manufacturerSpecificData = result.scanRecord!!.getManufacturerSpecificData()
+            val manufacturerSpecificData = result.scanRecord!!.getManufacturerSpecificData(ContactService.NODE_IDENTIFIER)
             if (manufacturerSpecificData != null) {
                 advertisementFoundCallback!!.onAdvertisementFound(result)
             }

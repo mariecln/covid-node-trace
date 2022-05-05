@@ -88,7 +88,9 @@ class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewM
                         if (rssi == 0)
                             return
 
-                        updateContactSignalStrength(ID, rssi)
+                        if (ID != null) {
+                            updateContactSignalStrength(ID, rssi)
+                        }
                     }
                     NODE_LOST -> {
                         val lostID = intent.getStringExtra("LOST_ID") ?: return

@@ -161,7 +161,7 @@ public class ContactService() : Service(), CoroutineScope {
 
         startForeground(1, notification)
 
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R)
+        /*if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R)
         {
             resetScan = Timer()
             resetScan?.schedule(object : TimerTask() {
@@ -173,7 +173,7 @@ public class ContactService() : Service(), CoroutineScope {
                     })
                 }
             }, 1, 120000)
-        }
+        }*/
     }
 
     /**
@@ -388,10 +388,10 @@ public class ContactService() : Service(), CoroutineScope {
     private fun checkDevicesInRangeTask() {
         //val iterator: MutableIterator<MutableMap.MutableEntry<String, ScanResult>> = foundDevices.iterator()
         val iterator = arraylist.iterator()
-
-        while (iterator.hasNext())
+        Log.d("list", "size "+arraylist.size)
+        for(element in arraylist)
         {
-            val device = iterator.next()
+            val device = element
             /*val currentTime = SystemClock.elapsedRealtime() / 1000
             val duration_current = createDateFormat(currentTime)
             val storedTime = element.timestampNanos / 1000000000
@@ -423,13 +423,58 @@ public class ContactService() : Service(), CoroutineScope {
 
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(broadcast)
 
-                iterator.remove()
+                //iterator.remove()
+                if (nodeID != null) {
+                    removeDeviceFromFoundList(device)
+                }
             }
         }
+
+        /*while (iterator.hasNext())
+        {
+            val device = iterator.next()
+            *//*val currentTime = SystemClock.elapsedRealtime() / 1000
+            val duration_current = createDateFormat(currentTime)
+            val storedTime = element.timestampNanos / 1000000000
+            val duration_store = createDateFormat(element.timestampNanos)
+            val millisecondDifference =  (currentTime - storedTime).toLong()*//*
+
+            val rxTimestampMillis: Long = System.currentTimeMillis() -
+                    SystemClock.elapsedRealtime() +
+                    device.getTimestampNanos() / 1000000
+            val other_duration = Date(rxTimestampMillis)
+            val currentDate = Date()
+            val diff: Long = currentDate.getTime() - other_duration.getTime()
+            val seconds = (diff / 1000).toInt()
+            Log.d("Time", "LOST ID ContactService name is "+device.device.name)
+            Log.d("Time", "second is  "+seconds)
+
+
+            if (seconds > CONTACT_OUT_OF_RANGE_TIMEOUT) {
+                Log.d("Time", "LOST ID")
+                val nodeID = device.scanRecord?.getManufacturerSpecificData(NODE_IDENTIFIER)?.let {
+                    byteArrayToHexString(it)
+                }
+                this.launch(Dispatchers.Main) {
+                    Toast.makeText(applicationContext, "Lost device:  ${device.device.name}", Toast.LENGTH_LONG).show()
+                }
+
+                val broadcast: Intent = Intent(ContactService.NODE_LOST)
+                    .putExtra("LOST_ID", nodeID)
+
+                LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(broadcast)
+
+                //iterator.remove()
+                if (nodeID != null) {
+                    removeDeviceFromFoundList(device)
+                }
+            }
+        }*/
     }
 
-    private fun removeDeviceFromFoundList(deviceAddress: String) {
-        //foundDevices.remove(deviceAddress)
+    private fun removeDeviceFromFoundList(device: ScanResult) {
+        val index: Int = arraylist.indexOf(device)
+        arraylist.removeAt(index)
     }
 
     /**

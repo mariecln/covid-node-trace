@@ -47,12 +47,12 @@ object NetworkHelper {
             val networkRequest = builder.build()
             connectivityManager.registerNetworkCallback(networkRequest,
                 object : ConnectivityManager.NetworkCallback () {
-                    override fun onAvailable(network: Network?) {
+                    override fun onAvailable(network: Network) {
                         super.onAvailable(network)
                         connectionState = ConnectionState.CONNECTED
                     }
 
-                    override fun onLost(network: Network?) {
+                    override fun onLost(network: Network) {
                         super.onLost(network)
                         connectionState = ConnectionState.DISCONNECTED
                     }
