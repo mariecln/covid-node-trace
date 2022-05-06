@@ -29,9 +29,15 @@ object DataFormatter {
 
 
 fun createDurationFormat(durationInMilliseconds : Long) : String {
-        val seconds : Long = TimeUnit.MILLISECONDS.toSeconds(durationInMilliseconds) % 60
+        /*val seconds : Long = TimeUnit.MILLISECONDS.toSeconds(durationInMilliseconds) % 60
     val minutes : Long = TimeUnit.MILLISECONDS.toMinutes(durationInMilliseconds) % 60
-    val hours : Long = TimeUnit.MILLISECONDS.toHours(durationInMilliseconds) % 60
+    val hours : Long = TimeUnit.MILLISECONDS.toHours(durationInMilliseconds) % 60*/
+
+    val hours = TimeUnit.MILLISECONDS.toHours(durationInMilliseconds)
+    val durationWithoutHours = durationInMilliseconds - TimeUnit.HOURS.toMillis(hours)
+    val minutes = TimeUnit.MILLISECONDS.toMinutes(durationWithoutHours)
+    val durationWithoutMinutes = durationWithoutHours- TimeUnit.MINUTES.toMillis(minutes)
+    val seconds = TimeUnit.MILLISECONDS.toSeconds(durationWithoutMinutes)
 
     val timeRange : TimeRange = if (minutes < 1L) TimeRange.SEC else if (minutes >= 1L && hours < 1L) TimeRange.MIN else TimeRange.HOURS
 
