@@ -96,7 +96,7 @@ class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewM
                         val lostID = intent.getStringExtra("LOST_ID") ?: return
 
                         val contact: Contact =
-                            updateContactDuration(lostID, getCurrentUnixDate()) ?: return
+                            updateContactDuration(lostID, Date()) ?: return
                         Log.d("Database", "contact lost is "+contact)
 
                         if (rssiEntries[lostID] != null) {
@@ -229,11 +229,11 @@ class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewM
      * Updates the contact's duration. The contact's duration will usually be updated when the device is out of range
      * or when the BLE signal is lost.
      */
-    fun updateContactDuration(ID: String, contactEnd: Long) : Contact? {
+    fun updateContactDuration(ID: String, contactEnd: Date) : Contact? {
         for (contact in contacts) {
             if (contact.ID == ID) {
-                contact.duration = contactEnd - contact.date
-                createDateFormat(contact.duration)
+                val contactStart = Date(contact.date)
+                contact.duration = contactEnd.time - contactStart.time
                 return contact
             }
         }
@@ -248,7 +248,7 @@ class ContactManager(context: Context, lifecycle: Lifecycle, viewModel: AppViewM
         val uuid = UUID.randomUUID().toString().toByteArray().copyOfRange(0, 16)
         contact.ID = uuid.toString()
         this.launch(Dispatchers.IO) {
-            val verif = appDatabase.contactDao().insert(contact)
+            appDatabase.contactDao().insert(contact)
         }
     }
 

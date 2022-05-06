@@ -413,7 +413,7 @@ public class ContactService() : Service(), CoroutineScope {
                     device.getTimestampNanos() / 1000000
             val other_duration = Date(rxTimestampMillis)
             val currentDate = Date()
-            val diff: Long = currentDate.getTime() - other_duration.getTime()
+            val diff: Long = currentDate.time - other_duration.time
             val seconds = (diff / 1000).toInt()
             Log.d("Time", "LOST ID ContactService name is "+device.device.name)
             Log.d("Time", "second is  "+seconds)
