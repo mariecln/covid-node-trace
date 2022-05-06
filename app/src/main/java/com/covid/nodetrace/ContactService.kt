@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.*
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.covid.nodetrace.bluetooth.BleScanner
@@ -46,10 +47,10 @@ public class ContactService() : Service(), CoroutineScope {
     var backgroundScanner : BleScanner? = null
     var bleAdvertiser : BleAdvertiser? = null
     var deviceInRangeTask : Timer? = null
-    //var foundDevices : HashMap<String, ScanResult> = hashMapOf()
+    var foundDevices : HashMap<String, ScanResult> = hashMapOf()
     //var foundDevices = HashMap<String, ScanResult>()
     var arraylist = ArrayList<ScanResult>()
-    var foundDevices = ArrayList<String>()
+    //var foundDevices = ArrayList<String>()
     var resetScan : Timer? = null
 
     override val coroutineContext: CoroutineContext = Dispatchers.Main + SupervisorJob()
@@ -319,10 +320,6 @@ public class ContactService() : Service(), CoroutineScope {
                     val nodeID = result.scanRecord?.getManufacturerSpecificData(NODE_IDENTIFIER)?.let {
                         byteArrayToHexString(it)
                     }
-                    Log.d("Database", "Manfacturer Data : "+result.scanRecord?.getManufacturerSpecificData(NODE_IDENTIFIER))
-                    if (nodeID != null) {
-                        foundDevices.add(nodeID)
-                    }
 
                     /*val broadcast: Intent = Intent(ContactService.NODE_FOUND)
                         .putExtra("FOUND_ID", nodeID)*/
@@ -358,7 +355,26 @@ public class ContactService() : Service(), CoroutineScope {
     }
 
     private fun hasNewDeviceBeenFound(result: ScanResult) : Boolean  {
-        for(element in arraylist)
+
+        val iterator = foundDevices.iterator()
+        val nodeIDFound = result.scanRecord?.getManufacturerSpecificData(NODE_IDENTIFIER)?.let {
+            byteArrayToHexString(it)
+        }
+        while(iterator.hasNext()){
+            val device = iterator.next()
+            val scan = device.value
+            val device_name = device.key
+            val nodeID = scan.scanRecord?.getManufacturerSpecificData(NODE_IDENTIFIER)?.let {
+                byteArrayToHexString(it)
+            }
+            if(nodeID == nodeIDFound){
+                foundDevices[device_name]=result
+                return false
+            }
+        }
+        foundDevices.put(result.device.name, result)
+
+        /*for(element in arraylist)
         {
             val nodeID = element.scanRecord?.getManufacturerSpecificData(NODE_IDENTIFIER)?.let {
                 byteArrayToHexString(it)
@@ -373,26 +389,20 @@ public class ContactService() : Service(), CoroutineScope {
                 return false
             }
         }
-        arraylist.add(result)
-        /*val iterator = foundDevices.iterator()
-        while(iterator.hasNext()){
-            val item = iterator.next()
-            if(item.key == result.device.name){
-                return false
-            }
-        }*/
-        //foundDevices.put(result.device.name, result)
+        arraylist.add(result)*/
         return true
     }
 
     private fun checkDevicesInRangeTask() {
-        //val iterator: MutableIterator<MutableMap.MutableEntry<String, ScanResult>> = foundDevices.iterator()
-        val iterator = arraylist.iterator()
-        Log.d("list", "size "+arraylist.size)
-        for(element in arraylist)
+        val iterator: MutableIterator<MutableMap.MutableEntry<String, ScanResult>> = foundDevices.iterator()
+        //val iterator = arraylist.iterator()
+        Log.d("IT", "--------------------Start Loop while --------------")
+        while (iterator.hasNext())
         {
-            val device = element
-            /*val currentTime = SystemClock.elapsedRealtime() / 1000
+            val device = iterator.next().value
+            Log.d("IT", "is "+device)
+            /*val device = iterator.next()
+            val currentTime = SystemClock.elapsedRealtime() / 1000
             val duration_current = createDateFormat(currentTime)
             val storedTime = element.timestampNanos / 1000000000
             val duration_store = createDateFormat(element.timestampNanos)
@@ -423,58 +433,18 @@ public class ContactService() : Service(), CoroutineScope {
 
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(broadcast)
 
-                //iterator.remove()
-                if (nodeID != null) {
-                    removeDeviceFromFoundList(device)
-                }
+                iterator.remove()
+                /*if (nodeID != null) {
+                    removeDeviceFromFoundList(iterator.next().key)
+                }*/
             }
         }
-
-        /*while (iterator.hasNext())
-        {
-            val device = iterator.next()
-            *//*val currentTime = SystemClock.elapsedRealtime() / 1000
-            val duration_current = createDateFormat(currentTime)
-            val storedTime = element.timestampNanos / 1000000000
-            val duration_store = createDateFormat(element.timestampNanos)
-            val millisecondDifference =  (currentTime - storedTime).toLong()*//*
-
-            val rxTimestampMillis: Long = System.currentTimeMillis() -
-                    SystemClock.elapsedRealtime() +
-                    device.getTimestampNanos() / 1000000
-            val other_duration = Date(rxTimestampMillis)
-            val currentDate = Date()
-            val diff: Long = currentDate.getTime() - other_duration.getTime()
-            val seconds = (diff / 1000).toInt()
-            Log.d("Time", "LOST ID ContactService name is "+device.device.name)
-            Log.d("Time", "second is  "+seconds)
-
-
-            if (seconds > CONTACT_OUT_OF_RANGE_TIMEOUT) {
-                Log.d("Time", "LOST ID")
-                val nodeID = device.scanRecord?.getManufacturerSpecificData(NODE_IDENTIFIER)?.let {
-                    byteArrayToHexString(it)
-                }
-                this.launch(Dispatchers.Main) {
-                    Toast.makeText(applicationContext, "Lost device:  ${device.device.name}", Toast.LENGTH_LONG).show()
-                }
-
-                val broadcast: Intent = Intent(ContactService.NODE_LOST)
-                    .putExtra("LOST_ID", nodeID)
-
-                LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(broadcast)
-
-                //iterator.remove()
-                if (nodeID != null) {
-                    removeDeviceFromFoundList(device)
-                }
-            }
-        }*/
     }
 
-    private fun removeDeviceFromFoundList(device: ScanResult) {
-        val index: Int = arraylist.indexOf(device)
-        arraylist.removeAt(index)
+    private fun removeDeviceFromFoundList(key:String) {
+        /*val index: Int = arraylist.indexOf(device)
+        arraylist.removeAt(index)*/
+        foundDevices.remove(key)
     }
 
     /**

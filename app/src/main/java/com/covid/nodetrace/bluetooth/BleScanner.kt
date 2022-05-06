@@ -47,7 +47,7 @@ class BleScanner {
     fun scanLeDevice(callback: OnAdvertisementFound?) {
         advertisementFoundCallback = callback
         scanLeDevice()
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R)
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q)
         {
             resetScan = Timer()
             resetScan?.schedule(object : TimerTask() {
@@ -76,7 +76,7 @@ class BleScanner {
         }
 
         val settingsBuilder = ScanSettings.Builder()
-            .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
+            .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             settingsBuilder.setCallbackType(android.bluetooth.le.ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
         }
