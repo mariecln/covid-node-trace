@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Context.LOCATION_SERVICE
 import android.content.Intent
-import android.content.Intent.getIntent
 import android.content.IntentFilter
 import android.location.Location
 import android.location.LocationManager
@@ -23,8 +22,8 @@ import com.covid.nodetrace.database.AppDatabase
 import com.covid.nodetrace.database.DatabaseFactory
 import com.covid.nodetrace.permissions.Permissions
 import com.covid.nodetrace.ui.AppViewModel
-import com.covid.nodetrace.util.DataFormatter.createDateFormat
 import kotlinx.coroutines.*
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.coroutines.CoroutineContext
 

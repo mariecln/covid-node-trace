@@ -29,9 +29,9 @@ object DataFormatter {
 
 
 fun createDurationFormat(durationInMilliseconds : Long) : String {
-    val seconds : Long = TimeUnit.MILLISECONDS.toSeconds(durationInMilliseconds) % 60
+        val seconds : Long = TimeUnit.MILLISECONDS.toSeconds(durationInMilliseconds) % 60
     val minutes : Long = TimeUnit.MILLISECONDS.toMinutes(durationInMilliseconds) % 60
-    val hours : Long = TimeUnit.MILLISECONDS.toHours(durationInMilliseconds) % 24
+    val hours : Long = TimeUnit.MILLISECONDS.toHours(durationInMilliseconds) % 60
 
     val timeRange : TimeRange = if (minutes < 1L) TimeRange.SEC else if (minutes >= 1L && hours < 1L) TimeRange.MIN else TimeRange.HOURS
 
@@ -59,6 +59,7 @@ fun createDurationFormat(durationInMilliseconds : Long) : String {
                     Locale.ROOT)
         }
     }
+
 }
 
 
