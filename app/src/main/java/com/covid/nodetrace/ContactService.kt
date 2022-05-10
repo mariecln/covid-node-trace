@@ -222,7 +222,15 @@ public class ContactService() : Service(), CoroutineScope {
     fun advertiseUniqueID () {
 
         val adapter : BluetoothAdapter? =  BluetoothAdapter.getDefaultAdapter()
-        val display_name = Build.MODEL+Build.ID
+        var display_name: String? = null
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q)
+        {
+            display_name = Build.MODEL
+        }
+        else
+        {
+            display_name = Build.MODEL+Build.ID
+        }
         //adapter?.setName("NODE")
         adapter?.setName(display_name)
         val device_address = adapter?.address
