@@ -222,7 +222,7 @@ public class ContactService() : Service(), CoroutineScope {
     fun advertiseUniqueID () {
 
         val adapter : BluetoothAdapter? =  BluetoothAdapter.getDefaultAdapter()
-        val display_name = Build.MODEL
+        val display_name = Build.MODEL+Build.ID
         //adapter?.setName("NODE")
         adapter?.setName(display_name)
         val device_address = adapter?.address
@@ -268,7 +268,7 @@ public class ContactService() : Service(), CoroutineScope {
             .build()
 
         val settings = AdvertiseSettings.Builder()
-            .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
+            .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_POWER)
             .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
             .setTimeout(0)
             .setConnectable(false)
@@ -356,7 +356,7 @@ public class ContactService() : Service(), CoroutineScope {
 
     private fun hasNewDeviceBeenFound(result: ScanResult) : Boolean  {
 
-        val iterator = foundDevices.iterator()
+        /*val iterator = foundDevices.iterator()
         val nodeIDFound = result.scanRecord?.getManufacturerSpecificData(NODE_IDENTIFIER)?.let {
             byteArrayToHexString(it)
         }
@@ -372,9 +372,9 @@ public class ContactService() : Service(), CoroutineScope {
                 return false
             }
         }
-        foundDevices.put(result.device.name, result)
+        val verif = foundDevices.put(result.device.name, result)*/
 
-        /*for(element in arraylist)
+        for(element in arraylist)
         {
             val nodeID = element.scanRecord?.getManufacturerSpecificData(NODE_IDENTIFIER)?.let {
                 byteArrayToHexString(it)
@@ -389,17 +389,17 @@ public class ContactService() : Service(), CoroutineScope {
                 return false
             }
         }
-        arraylist.add(result)*/
+        arraylist.add(result)
         return true
     }
 
     private fun checkDevicesInRangeTask() {
-        val iterator: MutableIterator<MutableMap.MutableEntry<String, ScanResult>> = foundDevices.iterator()
-        //val iterator = arraylist.iterator()
+        //val iterator: MutableIterator<MutableMap.MutableEntry<String, ScanResult>> = foundDevices.iterator()
+        val iterator = arraylist.iterator()
         Log.d("IT", "--------------------Start Loop while --------------")
         while (iterator.hasNext())
         {
-            val device = iterator.next().value
+            val device = iterator.next()
             Log.d("IT", "is "+device)
             /*val device = iterator.next()
             val currentTime = SystemClock.elapsedRealtime() / 1000

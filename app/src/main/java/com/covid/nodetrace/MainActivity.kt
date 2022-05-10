@@ -130,6 +130,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             NetworkHelper.registerNetworkCallback(this)
         }
+
     }
 
     /**

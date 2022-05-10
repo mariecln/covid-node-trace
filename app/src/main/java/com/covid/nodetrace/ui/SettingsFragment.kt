@@ -22,7 +22,6 @@ class SettingsFragment: Fragment() {
 
     private lateinit var advertiseOrScanSwitch : Switch
     private lateinit var appModeOrBroadcast : Switch
-    private lateinit var deviceID : TextView
     private var devModeClicks : Int = 0
     private final val DEV_CLICKS_NEEDED = 6
 
@@ -33,9 +32,6 @@ class SettingsFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val display_name = Build.MODEL
-        deviceID = view.findViewById(R.id.ID)
-        deviceID.setText(display_name)
 
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         val communicationTypeFromStorage: Int =

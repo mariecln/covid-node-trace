@@ -77,6 +77,8 @@ class BleScanner {
 
         val settingsBuilder = ScanSettings.Builder()
             .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+            /*.setUseHardwareBatchingIfSupported(true)
+            .setUseHardwareFilteringIfSupported(true)*/
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             settingsBuilder.setCallbackType(android.bluetooth.le.ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
         }

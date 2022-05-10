@@ -161,23 +161,6 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/advertise"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="ID advertise : "
-                    android:textAlignment="center"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/ID"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="none "
-                    android:textAlignment="center"
-                    android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
