@@ -8,6 +8,6 @@ Securely store the JSON file containing the key. You may also check this [docume
 Rename the JSON file to credentials.json <br/>
 Install [Node.je](https://nodejs.org/en/) <br/>
 Open Node.js command prompt <br/>
-Install npm : `npm install -g firebase-tools` <br/>
-Login in : `firebase login` <br/>
-Retrieve data in JSON file : `npx -p node-firestore-import-export firestore-export -a credentials.json -b backup.json` <br/>
+  Install npm : `npm install -g firebase-tools` <br/>
+  Login in : `firebase login` <br/>
+  Retrieve data in JSON file : `npx -p node-firestore-import-export firestore-export -a credentials.json -b backup.json` <br/>
